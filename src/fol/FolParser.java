@@ -17,6 +17,8 @@ import org.parboiled.support.ParsingResult;
 import org.parboiled.support.ToStringFormatter;
 import org.parboiled.trees.GraphNode;
 
+import fol.ast.Expr;
+
 
 /**
  * Base class of all calculator parsers in the org.parboiled.examples.calculators package.
@@ -44,18 +46,23 @@ public abstract class FolParser<V> extends BaseParser<V> {
             }
 
             Object value = result.parseTreeRoot.getValue();
+            
             if (value != null) {
                 String str = value.toString();
                 int ix = str.indexOf('|');
                 if (ix >= 0) str = str.substring(ix + 2); // extract value part of AST node toString()
                 System.out.println(input + " = " + str + '\n');
             }
-            if (value instanceof GraphNode) {
+            /*if (value instanceof GraphNode) {
                 System.out.println("\nAbstract Syntax Tree:\n" +
                         printTree((GraphNode) value, new ToStringFormatter(null)) + '\n');
-            } else {
+            } */
+        	if(value instanceof Expr){
+        		System.out.println("\n Abstract Syntax Tree:\n"+value+"\n");
+        	}else {
                 System.out.println("\nParse Tree:\n" + printNodeTree(result) + '\n');
             }
+            
         }
     }
 

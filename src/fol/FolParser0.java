@@ -3,6 +3,11 @@ import org.parboiled.BaseParser;
 import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;
 
+import fol.ast.ConstExpr;
+import fol.ast.Expr;
+import fol.ast.NotExpr;
+import fol.ast.VarExpr;
+
 @BuildParseTree
 
 public class FolParser0 extends FolParser<Object> {
@@ -19,11 +24,15 @@ public class FolParser0 extends FolParser<Object> {
 	}
 	
 	public Rule Constant(){
-		return CharRange('0', '1'); 
+		return Sequence(
+					CharRange('0', '1'),
+					push(new ConstExpr(match()))); 
 	}
 	
 	public Rule Variable(){
-		return OneOrMore(CharRange('a', 'z'));
+		return Sequence(
+					OneOrMore(CharRange('a', 'z')),
+					push(new VarExpr(match())));
 	}
 	
 	public Rule Function(){
@@ -49,8 +58,10 @@ public class FolParser0 extends FolParser<Object> {
 	public Rule Formula(){
 		return 	FirstOf(
 					Predicate(),
-					Sequence(Term(), ZeroOrMore(Sequence(AnyOf("+*"), Formula())))
-					,Sequence('/','(',Formula(),')')
+					Sequence(Term(), ZeroOrMore(Sequence(
+												AnyOf("+*"), Formula()
+												)))
+					,Sequence('/','(',Formula(), push(new NotExpr((Expr) pop())),')')
 					,Sequence('%',Variable(),'(',Formula(),')') //for all
 					,Sequence('$',Variable(),'(',Formula(),')')	//every
 					//,Sequence(Formula(),'=',Formula())
