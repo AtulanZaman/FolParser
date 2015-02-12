@@ -10,7 +10,7 @@ public class NotExpr extends Expr {
 
 	@Override
 	public String toString() {
-		return "/"+expr.toString();
+		return "/("+expr.toString()+")";
 	}
 	
 }
