@@ -16,6 +16,7 @@ import fol.ast.FuncExpr;
 import fol.ast.ImpliesExpr;
 import fol.ast.NotExpr;
 import fol.ast.OrExpr;
+import fol.ast.PredicateExpr;
 import fol.ast.VarExpr;
 
 @BuildParseTree
@@ -48,29 +49,37 @@ public class FolParser0 extends FolParser<Object> {
 	
 	public Rule Function(){
 		Var<Character> label = new Var<Character>();
-		Var<Integer> counter = new Var<Integer>();
-
 		return Sequence('&'
 						,CharRange('a','z')
 						, label.set(matchedChar())
-						, counter.set(0)
 						,'(',TermList(),')'
-						//, push(new FuncExpr(label.get().toString(), list.get()))
+						, push(new FuncExpr(label.get().toString(), (List<Expr>)pop()))
 						);
 	}
 	
 	public Rule Term(){
-		return FirstOf(Constant(), Variable(), Function());
+		return FirstOf(Constant(), Variable()
+				, Function()
+				);
 	}
 	
 	public Rule TermList(){
+		List<Expr> list = new ArrayList<Expr>();
+		Var<List<Expr>> temp = new Var<List<Expr>>();
 		return Sequence(Term()
-						,ZeroOrMore(',', TermList()));
+						,list.add((Expr)pop())
+						,push(list)
+						,ZeroOrMore(',', 	TermList()
+									//,temp.set((List<Expr>)pop(1))),
+									//temp.get().addAll((List<Expr>)pop()),
+									//push(temp.get()
+									
+						));
 	}
 	
 	public Rule TermList(Var<Integer> counter){
 		return Sequence(Term()
-						,counter.set(counter.get()+1)
+						//,counter.set(counter.get()+1)
 						,ZeroOrMore(',', TermList(counter)));
 	}
 	
@@ -80,13 +89,11 @@ public class FolParser0 extends FolParser<Object> {
 	 * */
 	public Rule Predicate(){
 		Var<Character> label = new Var<Character>();
-		Var<Integer> counter = new Var<Integer>();
 
 		return Sequence('^',CharRange('a', 'z')
 						, label.set(matchedChar())
-						, counter.set(0)
 						,'(',TermList(),')'
-						//, push(new PredicateExpr(label.get().toString(), list.get()))
+						, push(new PredicateExpr(label.get().toString(), (List<Expr>)pop()))
 				);
 	}
 	

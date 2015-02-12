@@ -14,12 +14,13 @@ public class FuncExpr extends Expr {
 
 	@Override
 	public String toString() {
-		return "func_"+label+"("+prettylist(exprs)+")";
+		return "func_"+this.label+"("+prettylist(this.exprs)+")";
 	}
 
-	private String prettylist(List<Expr> exprs2) {
+	private String prettylist(List<Expr> list) {
 		StringBuilder b = new StringBuilder();
-		for(Expr e: exprs){
+		System.out.println(b.toString());
+		for(Expr e: list){
 			b.append(e.toString());
 			b.append(',');
 		}

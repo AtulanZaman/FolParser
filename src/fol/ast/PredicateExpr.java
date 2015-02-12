@@ -14,12 +14,12 @@ public class PredicateExpr extends Expr {
 
 	@Override
 	public String toString() {
-		return "pred_"+label+"("+prettylist(exprs)+")";
+		return "pred_"+this.label+"("+prettylist(this.exprs)+")";
 	}
 	
-	private String prettylist(List<Expr> exprs2) {
+	private String prettylist(List<Expr> list) {
 		StringBuilder b = new StringBuilder();
-		for(Expr e: exprs){
+		for(Expr e: list){
 			b.append(e.toString());
 			b.append(',');
 		}
