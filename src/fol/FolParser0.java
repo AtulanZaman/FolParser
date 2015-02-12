@@ -64,17 +64,16 @@ public class FolParser0 extends FolParser<Object> {
 	}
 	
 	public Rule TermList(){
-		List<Expr> list = new ArrayList<Expr>();
-		Var<List<Expr>> temp = new Var<List<Expr>>();
+		Var<List<Expr>> temp = new Var<List<Expr>>(new ArrayList<Expr>());
 		return Sequence(Term()
-						,list.add((Expr)pop())
-						,push(list)
+						,temp.get().add((Expr)pop())
+						,push(temp.get())
 						,ZeroOrMore(',', 	TermList()
-									//,temp.set((List<Expr>)pop(1))),
-									//temp.get().addAll((List<Expr>)pop()),
-									//push(temp.get()
-									
-						));
+									,temp.clear()
+									,temp.set((List<Expr>)pop(1))
+									,temp.get().addAll((List<Expr>)pop())
+									,push(temp.get()									
+						)));
 	}
 	
 	public Rule TermList(Var<Integer> counter){

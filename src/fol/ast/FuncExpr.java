@@ -14,7 +14,7 @@ public class FuncExpr extends Expr {
 
 	@Override
 	public String toString() {
-		return "func_"+this.label+"("+prettylist(this.exprs)+")";
+		return "&"+this.label+"("+prettylist(this.exprs)+")";
 	}
 
 	private String prettylist(List<Expr> list) {
